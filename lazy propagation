@@ -1,0 +1,143 @@
+#include <iostream>
+#include <math.h>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+void updaterange(int lazy[],int Arr[],int vs,int ve,int diff,int qs,int qe,int si)
+{
+    
+    if(lazy[si]!=0)
+    {
+        Arr[si] +=(ve-vs+1)*lazy[si];
+        
+        if(vs!=ve)
+        {
+            lazy[si*2+1]+=lazy[si];
+            lazy[si*2+2]+=lazy[si];
+        }
+        lazy[si]=0;
+    }
+    
+    
+    if(qs>ve || qe<vs )
+        return;
+    
+    if(vs>=qs && qe<=ve)
+    {
+        Arr[si]+=(ve-vs+1)*diff;
+        if(vs!=ve)
+        {
+            lazy[2*si+1] +=diff;
+            lazy[2*si+2] +=diff;
+            
+        }
+        return ;
+    }
+    
+   
+        int m  = (vs+ve)/2;
+        updaterange(lazy,Arr,vs,m,diff,qs,qe,2*si+1);
+        updaterange(lazy,Arr,m+1,ve,diff,qs,qe,2*si+2);
+    
+    Arr[si]= Arr[si*2+1] + Arr[si*2+2];
+    
+    
+}
+
+
+int getSum(int lazy[],int Arr[],int qs,int qe,int vs,int ve,int si )
+{
+    if(lazy[si]!=0)
+    {
+        Arr[si] +=(ve-vs+1)*lazy[si];
+        
+        if(vs!=ve)
+        {
+            lazy[si*2+1]+=lazy[si];
+            lazy[si*2+2]+=lazy[si];
+        }
+        lazy[si]=0;
+    }
+    
+    
+    
+    
+    if(qs<=vs && qe>=ve)return Arr[si];
+    
+    if(ve<qs || vs>qe)return 0;
+    
+    int m = (vs+ve)/2;
+    
+    return getSum(lazy,Arr, qs,qe,vs,m,2*si+1)+ getSum(lazy,Arr, qs,qe,m+1,ve,2*si+2);
+    
+    
+}
+
+
+int construct(int lazy[],vector <int>& vec ,int Arr[],int vs,int ve,int si )
+{
+    
+    if(vs==ve)
+    {   //cout <<ss;
+        Arr[si]=vec[ve];
+        return Arr[si];
+        
+    }
+    int m  =(vs+ve)/2;
+    
+    Arr[si]=construct(lazy,vec,Arr,vs,m,2*si+1)+construct(lazy,vec,Arr,m+1,ve,2*si+2);
+    return Arr[si];
+    
+    
+}
+
+
+int main()
+{
+    vector < int  > vec;
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(3);
+    vec.push_back(4);
+    vec.push_back(5);
+    vec.push_back(6);
+    vec.push_back(7);
+    vec.push_back(8);
+    
+    
+    int v   = (int)vec.size();
+    
+    
+    int n =  (int) ceil(log2(v));
+    n=  (int)2* pow(2,n) - 1;
+    
+    int Arr[n];
+    int lazy[n];
+    for(int i=0;i<n;i++)lazy[i]=0;
+    
+    construct(lazy,vec,Arr,0,v-1,0);
+    int qs = 0;
+    int qe = 0;
+    //diff = newval-oldval
+    updaterange(lazy,Arr,0,v-1,1,0,3,0);
+    int q = getSum(lazy,Arr,qs,qe,0,v-1,0);q = getSum(lazy,Arr,qs,qe,0,v-1,0);
+    cout <<q;
+    
+    //for(int i=0;i<n;i++)
+    // cout <<Arr[i]<<" ";
+    
+    
+    return 1;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+}
+
+
