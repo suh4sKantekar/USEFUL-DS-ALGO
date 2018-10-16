@@ -91,7 +91,7 @@ int main()
                 val[ adj[p.first][i].first] = adj[p.first][i].second;
              
                 
-                pq.push({adj[p.first][i].first,adj[p.first][i].second});
+                pq.push({adj[p.first][i].first,val[ adj[p.first][i].first]});
                 P[adj[p.first][i].first] = p.first;
             
               }
