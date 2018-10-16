@@ -9,7 +9,7 @@ using namespace std;
 //https://www.geeksforgeeks.org/wp-content/uploads/Fig-11.jpg link for
 // add edges in graph , undirected edges do add to u and v both.
 
-//set parent -1;
+
 //set dist int_max;
 // set included as false;
 
@@ -66,8 +66,7 @@ int main()
     priority_queue < pair < int,int >,vector <pair < int,int > > ,greater <pair < int,int >   > > pq;
     int n=9;
     vector < int > val(n,INT_MAX);
-    
-    vector < int > P(n,-1);
+  
     int src =0;
     
     val[src]=0;
